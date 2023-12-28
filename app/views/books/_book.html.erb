@@ -1,0 +1,26 @@
+<div id="<%= dom_id book %>">
+  <p>
+    <strong>Person:</strong>
+    <%= book.person %>
+  </p>
+
+  <p>
+    <strong>Title:</strong>
+    <%= book.title %>
+  </p>
+
+  <p>
+    <strong>Isbn:</strong>
+    <%= book.isbn %>
+  </p>
+
+  <p>
+  <strong>Libraries:</strong>
+  <ul>
+    <% book.libraries.each do |library| %>
+      <li><%= library.name %></li>
+    <% end %>
+  </ul>
+  </p>
+
+</div>

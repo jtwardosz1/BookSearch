@@ -1,0 +1,31 @@
+<div id="<%= dom_id library %>">
+  <p>
+    <strong>County:</strong>
+    <%= library.county.name %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= library.name %>
+  </p>
+
+  <p>
+    <strong>Address:</strong>
+    <%= library.address %>
+  </p>
+
+  <p>
+    <strong>Telephone:</strong>
+    <%= library.telephone %>
+  </p>
+
+  <p>
+  <strong>Books:</strong>
+  <ul>
+    <% library.books.each do |book| %>
+      <li><%= book.title %></li>
+    <% end %>
+  </ul>
+  </p>
+
+</div>

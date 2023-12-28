@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Book Search</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <h1>{{ currentHeading }}</h1>
+            <div v-if="show === 'books'">
+                <!-- used Vue v-model to bind searchTerm to the input -->
+                <input type="text" v-model="searchTerm" placeholder="Search Books">
+                <ul>
+                    <li v-for="book in filteredBooks" :key="book.id">
+                        <b>{{ book.title }}</b> <br> {{ book.isbn }} - Written by: 
+                        <button @click="viewAuthor(book.person_id)">{{ getAuthor(book.person_id) }}</button>
+                        <br><br>
+                    </li>
+                </ul>
+            </div>
+            
+            <div v-if="show === 'author'">
+                <h3>{{ currentAuthor.name }}</h3>
+                <p>email: {{ currentAuthor.email }}</p>
+                <br>
+                <h4>Books by Author</h4>
+                <ul>
+                    <li v-for="book in getBooks(currentAuthor.id)" :key="book.id">
+                        {{ book.title }} - 
+                        <button @click="viewBooks()">Back to All Books</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    </body>
+
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                books: [],
+                authors: [],
+                show: 'books',
+                currentAuthor: null,
+                currentHeading: "Books",
+                searchTerm: ''
+            },
+            // Used ChatGPT to learn about computed properties vs methods
+            // Computed properties are best for recalculating from dependencies as they change
+            // in this case, the filteredBooks property is recalculated whenever searchTerm changes
+            computed: {
+                filteredBooks() {
+                if (this.searchTerm === '') {
+                    return this.books;
+                }
+                return this.books.filter(book => {
+                    const bookTitleMatch = book.title.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    const isbnMatch = book.isbn.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+                    const author = this.authors.find(author => author.id === book.person_id);
+                    const authorMatch = author ? author.name.toLowerCase().includes(this.searchTerm.toLowerCase()) : false;
+
+                    return bookTitleMatch || authorMatch || isbnMatch;
+                });
+                }
+            },
+            methods: {
+                fetchBooks() {
+                    fetch('http://localhost:3000/books.json')
+                        .then(response => response.json())
+                        .then(json => {
+                            this.books = json;
+                        });
+                },
+                fetchAuthors() {
+                    fetch('http://localhost:3000/people.json')
+                        .then(response => response.json())
+                        .then(json => {
+                            this.authors = json;
+                        });
+                },
+                // Used ChatGPT to get the get and view functions working
+                // Also used ChatGPT to learn how to dynamically change the heading
+
+                // getAuthor function handles taking the personId foreign key from the books table and finding the author's name
+                // it returns unknown if the author is not found
+                getAuthor(personId) {
+                    const author = this.authors.find(author => author.id === personId);
+                    return author ? author.name : 'Unknown';
+                },
+                getBooks(authorId) {
+                    return this.books.filter(book => book.person_id === authorId);
+                },
+                viewBooks() {
+                    this.show = 'books';
+                    this.currentHeading = "Books";
+                },
+                viewAuthor(authorId) {
+                    this.currentAuthor = this.authors.find(author => author.id === authorId);
+                    this.show = 'author';
+                    this.currentHeading = "Author";
+                }
+            },
+            mounted() {
+                this.fetchBooks();
+                this.fetchAuthors();
+            },
+        });
+
+
+    </script>
+</html>
+

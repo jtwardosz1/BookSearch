@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Counties</h1>
+
+<div id="counties">
+  <% @counties.each do |county| %>
+    <%= render county %>
+    <p>
+      <%= link_to "Show this county", county %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New county", new_county_path %>

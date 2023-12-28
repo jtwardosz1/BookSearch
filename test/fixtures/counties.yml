@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Fixtures for the join table books_libraries were learned from MSU Denver Discord
+
+one:
+  name: MyString
+  population: 1
+  coordinates: MyString
+
+two:
+  name: MyString
+  population: 1
+  coordinates: MyString

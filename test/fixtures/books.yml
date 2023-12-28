@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Fixtures for the join table books_libraries were learned from MSU Denver Discord
+
+one:
+  id: 1
+  person: one
+  title: MyString
+  isbn: MyString
+
+two:
+  id: 2
+  person: two
+  title: MyString
+  isbn: MyString
